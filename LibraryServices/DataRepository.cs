@@ -1,6 +1,7 @@
 ﻿using LibraryContext;
 using LibraryModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,14 +16,14 @@ namespace LibraryServices
             _contextDb = dbInstance;
         }
         //--------GETs----------
-        public Answer[] GetAnswers()
+        public IAsyncEnumerable<Answer> GetAnswers()
         {
-            return _contextDb.Answers.ToArray();
+            return _contextDb.Answers.AsAsyncEnumerable();
         }
 
-        public Question[] GetQuestions()
+        public IAsyncEnumerable<Question> GetQuestions()
         {
-            return _contextDb.Questions.ToArray();
+            return _contextDb.Questions.AsAsyncEnumerable();
         }
 
         //--------POSTs---------
