@@ -1,5 +1,6 @@
 ﻿using LibraryContext;
 using LibraryModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace LibraryServices
 {
+    /*
+     * To add:
+     * - Deletion of specific Question and Answers (linked)
+     * - Get Questions of X category
+     */
     public class DataRepository
     {
         private ContextDb _contextDb;
@@ -24,6 +30,17 @@ namespace LibraryServices
         public IAsyncEnumerable<Question> GetQuestions()
         {
             return _contextDb.Questions.AsAsyncEnumerable();
+        }
+
+        //GETs by text
+        public IAsyncEnumerable<Answer> GetAnswersByText(string text)
+        {
+            return (IAsyncEnumerable<Answer>)_contextDb.Answers.Where(c => c.Description.Contains(text));
+        }
+
+        public IAsyncEnumerable<Question> GetQuestionsByText(string text)
+        {
+            return (IAsyncEnumerable<Question>)_contextDb.Questions.Where(c => c.Description.Contains(text));
         }
 
         //--------POSTs---------
