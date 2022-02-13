@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MillionaireGame", "MillionaireGame\MillionaireGame.csproj", "{944D5F4D-C183-4FBB-AF10-7756FC866CFA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8DEF0B43-1167-4D4E-BFDE-D6729A073198} = {8DEF0B43-1167-4D4E-BFDE-D6729A073198}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryModels", "LibraryModels\LibraryModels.csproj", "{2AC2C7CC-4839-4AF7-BEF6-9E94342EE83A}"
 EndProject
@@ -11,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryContext", "LibraryCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MillionaireGameApi", "MillionaireGameApi\MillionaireGameApi.csproj", "{8DEF0B43-1167-4D4E-BFDE-D6729A073198}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryServices", "LibraryServices\LibraryServices.csproj", "{3C03E7B5-15D2-482D-98AC-FD2C1C288680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryServices", "LibraryServices\LibraryServices.csproj", "{3C03E7B5-15D2-482D-98AC-FD2C1C288680}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

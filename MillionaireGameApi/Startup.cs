@@ -1,8 +1,10 @@
+using LibraryContext;
 using LibraryServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +36,9 @@ namespace MillionaireGameApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MillionaireGameApi", Version = "v1" });
             });
 
+            services.AddDbContext<ContextDb>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("ContextDbString")));
+
             //Adding DataRepository as a service. - Makes connection to ContextDb
             services.AddTransient<DataRepository>();
         }
@@ -47,6 +52,15 @@ namespace MillionaireGameApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MillionaireGameApi v1"));
             }
+
+            app.UseCors(
+                options =>
+                {
+                    options.AllowAnyOrigin();
+                    options.AllowAnyHeader();
+                    options.AllowAnyMethod();
+                }
+            );
 
             app.UseHttpsRedirection();
 

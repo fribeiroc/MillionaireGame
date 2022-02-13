@@ -29,7 +29,7 @@ namespace MillionaireGameApi.Controllers
 
         // POST api/<QuestionsController>
         [HttpPost]
-        public async Task<Question> Post(Question newQuestion)
+        public async Task<Question> Post([FromBody]Question newQuestion)
         {
             return await _dataRepository.PostQuestion(newQuestion);
         }

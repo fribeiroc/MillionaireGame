@@ -1,0 +1,19 @@
+﻿<ul id="questionsList">
+    <li></li>
+</ul>
+
+<script>
+    function getQuestions() {
+        fetch("https://localhost:44342/api/Questions") // default: GET!
+            .then(response => response.json()) //getting obj with list of questions to pass to next method
+            .then(questions => show(questions));
+    }
+
+    function show(listQuestions) {
+        for (var i = 0; i < listQuestions.length; i++) {
+
+            document.getElementById("questionsList").innerHTML +=
+                '<li value="' + listQuestions[i].questionId + '">' + listQuestions[i].description + '</li>';
+        }
+    }
+</script>
