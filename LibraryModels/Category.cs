@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace LibraryModels
 {
-    public class Answer
+    public class Category
     {
         [Key]
         public int Id { get; set; }
         public string Description { get; set; }
 
-        //One Answer can attributed to many Questions 1-M
+        //One Category can attributed to many Questions 1-M
         public virtual ICollection<Question> Questions { get; set; }
     }
 }

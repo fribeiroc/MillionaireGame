@@ -13,6 +13,7 @@ namespace LibraryContext
 
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,9 +27,14 @@ namespace LibraryContext
                 new Answer() { Id = 7, Description = "C. Papagaio" },
                 new Answer() { Id = 8, Description = "D. Coentros" }
             );
+            modelBuilder.Entity<Category>().HasData(
+                new Category() { Id = 1, Description = "Geografia" },
+                new Category() { Id = 2, Description = "Cultura Portuguesa" },
+                new Category() { Id = 3, Description = "Animais" }
+            );
             modelBuilder.Entity<Question>().HasData(
-                new Question() { Id = 1, Description = "Qual destes está mais próximo de França?", AnswerId = 2 },
-                new Question() { Id = 2, Description = "Qual destes fala?", AnswerId = 8 }
+                new Question() { Id = 1, Description = "Qual destes está mais próximo de França?", AnswerId = 2, CategoryId = 1 },
+                new Question() { Id = 2, Description = "Qual destes fala?", AnswerId = 8, CategoryId = 3 }
             );
         }
     }

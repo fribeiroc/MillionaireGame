@@ -32,6 +32,11 @@ namespace LibraryServices
             return _contextDb.Questions.AsAsyncEnumerable();
         }
 
+        public IAsyncEnumerable<Category> GetCategories()
+        {
+            return _contextDb.Categories.AsAsyncEnumerable();
+        }
+
         //GETs by text
         public IAsyncEnumerable<Answer> GetAnswersByText(string text)
         {
@@ -41,6 +46,11 @@ namespace LibraryServices
         public IAsyncEnumerable<Question> GetQuestionsByText(string text)
         {
             return (IAsyncEnumerable<Question>)_contextDb.Questions.Where(c => c.Description.Contains(text));
+        }
+
+        public IAsyncEnumerable<Category> GetCategoriesByText(string text)
+        {
+            return (IAsyncEnumerable<Category>)_contextDb.Categories.Where(c => c.Description.Contains(text));
         }
 
         //--------POSTs---------
@@ -73,6 +83,21 @@ namespace LibraryServices
             }
             
             return newQuestion;
+        }
+
+        public async Task<Category> PostCategory(Category newCategory)
+        {
+            try
+            {
+                await _contextDb.AddAsync(newCategory);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return newCategory;
         }
     }
 }
