@@ -21,34 +21,33 @@ namespace LibraryServices
         {
             _contextDb = dbInstance;
         }
-        //--------GETs----------
+
+        //--------GETs Answers----------
         public IAsyncEnumerable<Answer> GetAnswers()
         {
             return _contextDb.Answers.AsAsyncEnumerable();
         }
-
-        public IAsyncEnumerable<Question> GetQuestions()
-        {
-            return _contextDb.Questions.AsAsyncEnumerable();
-        }
-
-        public IAsyncEnumerable<Category> GetCategories()
-        {
-            return _contextDb.Categories.AsAsyncEnumerable();
-        }
-
-        //GETs by text
-        public IAsyncEnumerable<Answer> GetAnswersByText(string text)
+        public IAsyncEnumerable<Answer> GetAnswersByText(string text) //Get by text
         {
             return (IAsyncEnumerable<Answer>)_contextDb.Answers.Where(c => c.Description.Contains(text));
         }
 
-        public IAsyncEnumerable<Question> GetQuestionsByText(string text)
+        //--------GETs Questions----------
+        public IAsyncEnumerable<Question> GetQuestions()
+        {
+            return _contextDb.Questions.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<Question> GetQuestionsByText(string text) //Get by text
         {
             return (IAsyncEnumerable<Question>)_contextDb.Questions.Where(c => c.Description.Contains(text));
         }
 
-        public IAsyncEnumerable<Category> GetCategoriesByText(string text)
+        //--------GETs Categories----------
+        public IAsyncEnumerable<Category> GetCategories()
+        {
+            return _contextDb.Categories.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<Category> GetCategoriesByText(string text) //Get by text
         {
             return (IAsyncEnumerable<Category>)_contextDb.Categories.Where(c => c.Description.Contains(text));
         }
