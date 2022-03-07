@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<li id="listAnswers">
+
+</li>
+
+
+<!--
+    To search for answers by text
+-->
+<li id="byText">
+
+</li>
+
+<input type="text" name="searchBox" id="inp" />
+<button type="submit" onclick="getAnswerByText()">Pesquisar</button>
+
+<script>
+    //Using fetch to contact the API and get the questions values
+    function getAnswers() {
+        fetch("https://localhost:44387/api/Answers") // default: GET!
+            .then(response => response.json()) // generates an object with the list of questions
+            .then(answers => showAnswers(answers));
+    }
+
+    function showAnswers(answersObj) {
+        for (var i = 0; i < answersObj.length; i++) {
+            document.getElementById("listAnswers").innerHTML +=
+                '<p>' + answersObj[i].description + '</p>';
+        }
+    }
+
+    //Searches questions by text with the value inputed
+    function getAnswerByText() {
+        fetch("https://localhost:44387/Answers/GetByText/" + document.getElementById("inp").value)
+            .then(response => response.json())
+            .then(answerByText => listByText(answerByText))
+    }
+
+    function listByText(answerObj) {
+        for (var i = 0; i < answerObj.length; i++) {
+            document.getElementById("byText").innerHTML +=
+                '<p>' + answerObj[i].description + '</p>';
+        }
+    }
+
+    getAnswers();
+</script>
