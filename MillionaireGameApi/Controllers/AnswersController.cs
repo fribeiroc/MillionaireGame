@@ -35,6 +35,14 @@ namespace MillionaireGameApi.Controllers
             return _dataRepository.GetAnswersByText(text);
         }
 
+        // GET: api/<AnswersController>{id}
+        [HttpGet]
+        [Route("/[controller]/[action]/{id}")]
+        public IAsyncEnumerable<Answer> GetById(int id)
+        {
+            return _dataRepository.GetAnswerById(id);
+        }
+
         // POST api/<AnswersController>
         [HttpPost]
         public async Task<Answer> Post([FromBody]Answer newAnswer)

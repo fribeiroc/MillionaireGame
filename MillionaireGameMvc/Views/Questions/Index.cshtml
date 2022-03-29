@@ -4,9 +4,21 @@
 @{
 }
 
-<li id="listQuestions">
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Description</th>
+        <th>Answer</th>
+        <th>Category</th>
+    </tr>
+    <tbody id="listQuestions">
 
-</li>
+    </tbody>
+</table>
+
+@*<li id="listQuestions">
+
+</li>*@
 
 
 <!--
@@ -30,7 +42,10 @@
     function showQuestions(questionsObj) {
         for (var i = 0; i < questionsObj.length; i++) {
             document.getElementById("listQuestions").innerHTML +=
-                '<p>' + questionsObj[i].description + '</p>';
+                '<tr><td>' + questionsObj[i].id + '</td>' +
+                '<td>' + questionsObj[i].description + '</td>' +
+                '<td>' + questionsObj[i].answerId + '</td>' +
+                '<td>' + questionsObj[i].categoryId + '</td></tr>';
         }
     }
 
@@ -46,6 +61,12 @@
             document.getElementById("byText").innerHTML +=
                 '<p>' + questionObj[i].description + '</p>';
         }
+    }
+
+    function getAnswerById() {
+        fetch("https://localhost:44387/api/Answers") // default: GET!
+            .then(response => response.json()) // generates an object with the list of questions
+            .then(answers => showAnswers(answers));
     }
 
     getQuestions();

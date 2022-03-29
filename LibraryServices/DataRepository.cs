@@ -31,6 +31,10 @@ namespace LibraryServices
         {
             return (IAsyncEnumerable<Answer>)_contextDb.Answers.Where(c => c.Description.Contains(text));
         }
+        public IAsyncEnumerable<Answer> GetAnswerById(int id) //Get by Id
+        {
+            return (IAsyncEnumerable<Answer>)_contextDb.Answers.Where(c => c.Id.Equals(id));
+        }
 
         //--------GETs Questions----------
         public IAsyncEnumerable<Question> GetQuestions()
