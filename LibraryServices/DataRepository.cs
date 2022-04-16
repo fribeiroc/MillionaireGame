@@ -22,6 +22,7 @@ namespace LibraryServices
             _contextDb = dbInstance;
         }
 
+        #region ------------GETs------------
         //--------GETs Answers----------
         public IAsyncEnumerable<Answer> GetAnswers()
         {
@@ -55,8 +56,9 @@ namespace LibraryServices
         {
             return (IAsyncEnumerable<Category>)_contextDb.Categories.Where(c => c.Description.Contains(text));
         }
+        #endregion
 
-        //--------POSTs---------
+        #region ------------POSTs------------
         public async Task<Answer> PostAnswer(Answer newAnswer)
         {
             try
@@ -102,5 +104,122 @@ namespace LibraryServices
 
             return newCategory;
         }
+        #endregion
+
+        #region ------------PUTs------------
+        public async Task<bool> PutAnswer(int id, string description)
+        {
+            try
+            {
+                var answer = await _contextDb.Answers.FindAsync(id);
+                if (answer == null) return false;
+
+                answer.Description = description;
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public async Task<bool> PutQuestion(int id, int answerId, int categoryId, string description)
+        {
+            try
+            {
+                var question = await _contextDb.Questions.FindAsync(id);
+                if (question == null) return false;
+
+                question.Description = description;
+                question.AnswerId = answerId;
+                question.CategoryId = categoryId;
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public async Task<bool> PutCategory(int id, string description)
+        {
+            try
+            {
+                var category = await _contextDb.Categories.FindAsync(id);
+                if (category == null) return false;
+
+                category.Description = description;
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+        #endregion
+
+        #region ------------DELETEs------------
+        //Categories and Answers deletion don't delete the associated Questions, but a check must be made so that users don't leave a Question without Category or Answers. A check on both frontend and backend.
+        public async Task<bool> DeleteAnswer(int id)
+        {
+            try
+            {
+                var answer = await _contextDb.Answers.SingleAsync(x => x.Id == id);
+                if (answer == null) return false;
+
+                _contextDb.Answers.Remove(answer);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteCategory(int id)
+        {
+            try
+            {
+                var category = await _contextDb.Categories.SingleAsync(x => x.Id == id);
+                if (category == null) return false;
+
+                _contextDb.Categories.Remove(category);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteQuestion(int id)
+        {
+            try
+            {
+                var question = await _contextDb.Questions.SingleAsync(x => x.Id == id);
+                if (question == null) return false;
+
+                _contextDb.Questions.Remove(question);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

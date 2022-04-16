@@ -64,7 +64,7 @@ namespace MillionaireGameMvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(answer);
-        }
+        }*/
 
         // GET: Answers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -74,7 +74,7 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var answer = await _context.Answer.FindAsync(id);
+            var answer = await _httpClient.GetAnswersById(id);
             if (answer == null)
             {
                 return NotFound();
@@ -85,7 +85,7 @@ namespace MillionaireGameMvc.Controllers
         // POST: Answers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Description")] Answer answer)
         {
@@ -98,7 +98,7 @@ namespace MillionaireGameMvc.Controllers
             {
                 try
                 {
-                    _context.Update(answer);
+                     _context.Update(answer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -115,8 +115,8 @@ namespace MillionaireGameMvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(answer);
-        }
-
+        }*/
+        /*
         // GET: Answers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -49,5 +49,19 @@ namespace MillionaireGameApi.Controllers
         {
             return await _dataRepository.PostAnswer(newAnswer);
         }
+
+        // PUT api/<AnswersController>{id}
+        [HttpPut("{id}")]
+        public async Task<bool> Put([FromQuery]int id, string description)
+        {
+            return await _dataRepository.PutAnswer(id, description);
+        }
+
+        // DELETE api/<AnswersController>{id}
+        [HttpDelete("{id}")]
+        public async Task<bool> Delete([FromQuery] int id)
+        {
+            return await _dataRepository.DeleteAnswer(id);
+        }
     }
 }
