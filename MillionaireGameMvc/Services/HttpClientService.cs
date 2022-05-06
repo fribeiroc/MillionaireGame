@@ -52,5 +52,16 @@ namespace MillionaireGameMvc.Services
 
             return questions;
         }
+
+        public async Task<bool> UpdateAnswer(int id, string description)
+        {
+            //9?id=9&description=Ornintorrinco
+            var response = await client.PutAsync("/api/Answers/" + id + "?id=" + id + "&description=" + description, null);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
