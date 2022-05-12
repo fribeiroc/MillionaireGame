@@ -53,6 +53,15 @@ namespace MillionaireGameMvc.Services
             return questions;
         }
 
+        public async Task<List<Question>> GetQuestionsById(int? id)
+        {
+            var response = await client.GetAsync("/Questions/GetById/" + id);
+            var data = await response.Content.ReadAsStringAsync();
+            var question = JsonConvert.DeserializeObject<List<Question>>(data);
+
+            return question;
+        }
+
         public async Task<bool> UpdateAnswer(int id, string description)
         {
             //9?id=9&description=Ornintorrinco

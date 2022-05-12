@@ -24,7 +24,7 @@ namespace MillionaireGameMvc.Controllers
         {
             return View(await _httpClient.GetQuestions());
         }
-        /*
+        
         // GET: Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,18 +33,16 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var question = await _context.Question
-                .Include(q => q.Answer)
-                .Include(q => q.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (question == null)
+            var answer = await _httpClient.GetQuestionsById(id);
+            if (answer == null)
             {
                 return NotFound();
             }
+            var converted = answer.Cast<Question>().ToArray();
 
-            return View(question);
+            return View(converted[0]);
         }
-
+        /*
         // GET: Questions/Create
         public IActionResult Create()
         {
