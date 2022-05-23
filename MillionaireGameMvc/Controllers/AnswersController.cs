@@ -43,7 +43,6 @@ namespace MillionaireGameMvc.Controllers
 
             return View(converted[0]);
         }
-        /*
         // GET: Answers/Create
         public IActionResult Create()
         {
@@ -59,12 +58,10 @@ namespace MillionaireGameMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(answer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await _httpClient.CreateAnswer(answer.Id, answer.Description);
             }
             return View(answer);
-        }*/
+        }
 
         // GET: Answers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -117,7 +114,7 @@ namespace MillionaireGameMvc.Controllers
             }
             return View(answer);
         }
-        /*
+
         // GET: Answers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -150,6 +147,6 @@ namespace MillionaireGameMvc.Controllers
         private bool AnswerExists(int id)
         {
             return _context.Answer.Any(e => e.Id == id);
-        }*/
+        }
     }
 }

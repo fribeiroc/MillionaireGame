@@ -68,62 +68,63 @@ namespace MillionaireGameMvc.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", question.CategoryId);
             return View(question);
         }
-
+        */
         // GET: Questions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var question = await _context.Question.FindAsync(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-            ViewData["AnswerId"] = new SelectList(_context.Set<Answer>(), "Id", "Id", question.AnswerId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", question.CategoryId);
-            return View(question);
-        }
+        //    var question = await _httpClient.GetQuestionsById(id);
+        //    if (question == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    //Tenho de fazer com que a alteração de uma pergunta seja possível aqui também
+        //    ViewData["AnswerId"] = new SelectList(_context.Set<Answer>(), "Id", "Id", question.AnswerId);
+        //    ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", question.CategoryId);
+        //    return View(question);
+        //}
+        
+        //// POST: Questions/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Description,AnswerId,CategoryId")] Question question)
+        //{
+        //    if (id != question.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-        // POST: Questions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,AnswerId,CategoryId")] Question question)
-        {
-            if (id != question.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(question);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!QuestionExists(question.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AnswerId"] = new SelectList(_context.Set<Answer>(), "Id", "Id", question.AnswerId);
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", question.CategoryId);
-            return View(question);
-        }
-
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(question);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!QuestionExists(question.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["AnswerId"] = new SelectList(_context.Set<Answer>(), "Id", "Id", question.AnswerId);
+        //    ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Id", question.CategoryId);
+        //    return View(question);
+        //}
+        /*
         // GET: Questions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

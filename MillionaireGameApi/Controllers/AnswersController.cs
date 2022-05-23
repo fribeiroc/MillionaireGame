@@ -45,7 +45,7 @@ namespace MillionaireGameApi.Controllers
 
         // POST api/<AnswersController>
         [HttpPost]
-        public async Task<Answer> Post([FromBody]Answer newAnswer)
+        public async Task<Answer> Post([FromQuery]Answer newAnswer)
         {
             return await _dataRepository.PostAnswer(newAnswer);
         }
