@@ -123,14 +123,13 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var answer = await _context.Answer
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var answer = await _httpClient.GetAnswersById(id);
             if (answer == null)
             {
                 return NotFound();
             }
-
-            return View(answer);
+            var converted = answer.Cast<Answer>().ToArray();
+            return View(converted[0]);
         }
 
         // POST: Answers/Delete/5
@@ -138,15 +137,13 @@ namespace MillionaireGameMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var answer = await _context.Answer.FindAsync(id);
-            _context.Answer.Remove(answer);
-            await _context.SaveChangesAsync();
+            await _httpClient.DeleteAnswer(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AnswerExists(int id)
-        {
-            return _context.Answer.Any(e => e.Id == id);
-        }
+        //private bool AnswerExists(int id)
+        //{
+        //    return _context.Answer.Any(e => e.Id == id);
+        //}
     }
 }

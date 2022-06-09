@@ -185,7 +185,7 @@ namespace LibraryServices
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return false; //quero saber se o valor false/true é lido no HttpClientService MVC
             }
             return true;
         }

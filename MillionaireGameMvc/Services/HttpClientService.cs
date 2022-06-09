@@ -83,9 +83,14 @@ namespace MillionaireGameMvc.Services
             return false;
         }
 
-        public async Task<bool> DeleteAnswer(int id, string description)
+        public async Task<bool> DeleteAnswer(int id)
         {
-            var response = await client.DeleteAsync("/api/Answers?Id=" + id);
+            var response = await client.DeleteAsync("/api/Answers/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
