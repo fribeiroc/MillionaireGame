@@ -24,7 +24,7 @@ namespace MillionaireGameMvc.Controllers
         {
             return View(await _httpClient.GetCategories());
         }
-        /*
+        
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,13 +33,16 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _httpClient.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
             }
-
+            /*Reason to do the Cast and array:
+             * JsonSerializationException: Cannot deserialize the current JSON object (e.g. {"name":"value"}) into type 'System.Collections.Generic.List`1[LibraryModels.Category]'
+             * because the type requires a JSON array (e.g. [1,2,3]) to deserialize correctly. To fix this error either change the JSON to a JSON array (e.g. [1,2,3]) or change the
+             * deserialized type so that it is a normal .NET type (e.g. not a primitive type like integer, not a collection type like an array or List<T>) that can be deserialized
+             * from a JSON object. JsonObjectAttribute can also be added to the type to force it to deserialize from a JSON object.*/
             return View(category);
         }
 
@@ -58,8 +61,7 @@ namespace MillionaireGameMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _httpClient.CreateCategory(category.Id, category.Description);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -73,11 +75,12 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
+            var category = await _httpClient.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
             }
+            
             return View(category);
         }
 
@@ -97,12 +100,11 @@ namespace MillionaireGameMvc.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    await _httpClient.UpdateCategory(category.Id, category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (_httpClient.GetCategoryById(category.Id) == null)
                     {
                         return NotFound();
                     }
@@ -124,8 +126,7 @@ namespace MillionaireGameMvc.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var category = await _httpClient.GetCategoryById(id);
             if (category == null)
             {
                 return NotFound();
@@ -139,13 +140,11 @@ namespace MillionaireGameMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Category.FindAsync(id);
-            _context.Category.Remove(category);
-            await _context.SaveChangesAsync();
+            await _httpClient.DeleteCategory(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        /*private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.Id == id);
         }*/

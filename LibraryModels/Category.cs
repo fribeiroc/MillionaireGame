@@ -14,6 +14,6 @@ namespace LibraryModels
         public string Description { get; set; }
 
         //One Category can attributed to many Questions 1-M
-        public virtual ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

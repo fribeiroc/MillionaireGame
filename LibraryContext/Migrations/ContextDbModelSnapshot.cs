@@ -32,48 +32,49 @@ namespace LibraryContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Answers");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "A. Portugal"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "B. Espanha"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "C. Argentina"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "D. Malta"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "A. Gato"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "B. Coelho"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "C. Papagaio"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "D. Coentros"
-                        });
+            modelBuilder.Entity("LibraryModels.BuyingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<bool>("IsBought")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BuyingCarts");
+                });
+
+            modelBuilder.Entity("LibraryModels.CartLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("BuyingCartId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyingCartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartLines");
                 });
 
             modelBuilder.Entity("LibraryModels.Category", b =>
@@ -89,33 +90,39 @@ namespace LibraryContext.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Geografia"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Cultura Portuguesa"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Animais"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "História"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Ciencias"
-                        });
+            modelBuilder.Entity("LibraryModels.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("nvarchar(35)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("LibraryModels.Question", b =>
@@ -141,36 +148,68 @@ namespace LibraryContext.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Questions");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AnswerId = 2,
-                            CategoryId = 1,
-                            Description = "Qual destes está mais próximo de França?"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AnswerId = 8,
-                            CategoryId = 3,
-                            Description = "Qual destes fala?"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AnswerId = 4,
-                            CategoryId = 5,
-                            Description = "Quem é o maior?"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AnswerId = 5,
-                            CategoryId = 1,
-                            Description = "O que é que se come aqui?"
-                        });
+            modelBuilder.Entity("LibraryModels.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("BuyingCartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuyingCartId")
+                        .IsUnique()
+                        .HasFilter("[BuyingCartId] IS NOT NULL");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LibraryModels.CartLine", b =>
+                {
+                    b.HasOne("LibraryModels.BuyingCart", "BuyingCart")
+                        .WithMany("CartLines")
+                        .HasForeignKey("BuyingCartId");
+
+                    b.HasOne("LibraryModels.Product", "Product")
+                        .WithMany("CartLines")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("BuyingCart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("LibraryModels.Product", b =>
+                {
+                    b.HasOne("LibraryModels.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("LibraryModels.Question", b =>
@@ -180,7 +219,7 @@ namespace LibraryContext.Migrations
                         .HasForeignKey("AnswerId");
 
                     b.HasOne("LibraryModels.Category", "Category")
-                        .WithMany("Questions")
+                        .WithMany()
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Answer");
@@ -188,14 +227,35 @@ namespace LibraryContext.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("LibraryModels.User", b =>
+                {
+                    b.HasOne("LibraryModels.BuyingCart", "BuyingCart")
+                        .WithOne("User")
+                        .HasForeignKey("LibraryModels.User", "BuyingCartId");
+
+                    b.Navigation("BuyingCart");
+                });
+
             modelBuilder.Entity("LibraryModels.Answer", b =>
                 {
                     b.Navigation("Questions");
                 });
 
+            modelBuilder.Entity("LibraryModels.BuyingCart", b =>
+                {
+                    b.Navigation("CartLines");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("LibraryModels.Category", b =>
                 {
-                    b.Navigation("Questions");
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("LibraryModels.Product", b =>
+                {
+                    b.Navigation("CartLines");
                 });
 #pragma warning restore 612, 618
         }

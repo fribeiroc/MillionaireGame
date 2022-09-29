@@ -30,11 +30,15 @@ namespace LibraryContext
 
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<BuyingCart> BuyingCarts { get; set; }
+        public DbSet<CartLine> CartLines { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Answer>().HasData(
+            /*modelBuilder.Entity<Answer>().HasData(
                 new Answer() { Id = 1, Description = "A. Portugal" },
                 new Answer() { Id = 2, Description = "B. Espanha" },
                 new Answer() { Id = 3, Description = "C. Argentina" },
@@ -56,7 +60,7 @@ namespace LibraryContext
                 new Question() { Id = 2, Description = "Qual destes fala?", AnswerId = 8, CategoryId = 3 },
                 new Question() { Id = 3, Description = "Quem é o maior?", AnswerId = 4, CategoryId = 5 },
                 new Question() { Id = 4, Description = "O que é que se come aqui?", AnswerId = 5, CategoryId = 1 }
-            );
+            );*/
         }
     }
 }

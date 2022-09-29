@@ -1,6 +1,8 @@
 ﻿using LibraryContext;
 using LibraryModels;
 using Microsoft.EntityFrameworkCore;
+//using MillionaireGameMvc.Areas.Identity.Data;
+//using MillionaireGameMvc.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,13 @@ namespace LibraryServices
      */
     public class DataRepository
     {
-        private ContextDb _contextDb;
+        private ContextDb _contextDb; //Custum database context
+        //private LoginMvcContext _loginMvcContext; //Identity Core context
 
-        public DataRepository(ContextDb dbInstance)
+        public DataRepository(ContextDb dbInstance/*, LoginMvcContext loginMvcContext*/)
         {
             _contextDb = dbInstance;
+            //_loginMvcContext = loginMvcContext;
         }
 
         #region ------------GETs------------
@@ -37,6 +41,84 @@ namespace LibraryServices
             return (IAsyncEnumerable<Answer>)_contextDb.Answers.Where(c => c.Id.Equals(id));
         }
 
+        //--------GETs Users----------
+        public IAsyncEnumerable<User> GetUsers()
+        {
+            return _contextDb.Users.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<User> GetUsersByText(string text) //Get by text
+        {
+            return (IAsyncEnumerable<User>)_contextDb.Users.Where(c => c.Username.Contains(text));
+        }
+        public Task<User> GetUserById(int id) //Get by Id
+        {
+            return _contextDb.Users.SingleAsync(c => c.Id.Equals(id));
+        }
+
+        //--------GETs Identity Users--------
+        /*public IAsyncEnumerable<LoginMvcUser> GetIdentityUsers()
+        {
+            return _loginMvcContext.Users.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<LoginMvcUser> GetIdentityUsersByText(string text) //Get by text
+        {
+            return (IAsyncEnumerable<LoginMvcUser>)_loginMvcContext.Users.Where(c => c.Email.Contains(text));
+        }
+        public Task<LoginMvcUser> GetIdentityUserById(int id) //Get by Id
+        {
+            return _loginMvcContext.Users.SingleAsync(c => c.Id.Equals(id));
+        }*/
+
+        //--------GETs Products----------
+        public IAsyncEnumerable<Product> GetProducts()
+        {
+            return _contextDb.Products.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<Product> GetProductsByText(string text) //Get by text
+        {
+            return (IAsyncEnumerable<Product>)_contextDb.Products.Where(c => c.Name.Contains(text));
+        }
+        public Task<Product> GetProductById(int id) //Get by Id
+        {
+            return _contextDb.Products.SingleAsync(c => c.Id.Equals(id));
+        }
+
+        //--------GETs CartLines----------
+        public IAsyncEnumerable<CartLine> GetCartLines()
+        {
+            return _contextDb.CartLines.Include(p => p.Product).AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<CartLine> GetCartLinesByBuyingCartId(int id) //Get by text
+        {
+            return (IAsyncEnumerable<CartLine>)_contextDb.CartLines.Where(c => c.BuyingCartId.Equals(id));
+        }
+        public Task<CartLine> GetCartLineById(int id) //Get by Id
+        {
+            return _contextDb.CartLines.SingleAsync(c => c.Id.Equals(id));
+        }
+
+        public IAsyncEnumerable<CartLine> GetCartLinesByProductText(string text) //Get by text
+        {
+            var query = from c in _contextDb.CartLines join pr in _contextDb.Products
+                        on c.ProductId equals pr.Id where pr.Name.Contains(text) 
+                        select pr.Name + pr.Price + pr.Description + c.Quantity;
+            return (IAsyncEnumerable<CartLine>)query;
+        }
+
+        //--------GETs BuyingCarts----------
+        public IAsyncEnumerable<BuyingCart> GetBuyingCarts()
+        {
+            return _contextDb.BuyingCarts.AsAsyncEnumerable();
+        }
+        public IAsyncEnumerable<BuyingCart> GetBuyingCartsByUserId(int id) //Get by text
+        {
+            return (IAsyncEnumerable<BuyingCart>)_contextDb.BuyingCarts.Where(c => c.UserId.Equals(id));
+        }
+        public Task<BuyingCart> GetBuyingCartById(int id) //Get by Id
+        {
+            return _contextDb.BuyingCarts.SingleAsync(c => c.Id.Equals(id));
+        }
+
         //--------GETs Questions----------
         public IAsyncEnumerable<Question> GetQuestions()
         {
@@ -45,7 +127,7 @@ namespace LibraryServices
 
         public IAsyncEnumerable<Question> GetQuestionById(int id) //Get by text
         {
-            return (IAsyncEnumerable<Question>)_contextDb.Questions.Where(c => c.Id.Equals(id));
+            return (IAsyncEnumerable<Question>)_contextDb.Questions.SingleAsync(c => c.Id.Equals(id));
         }
 
         public IAsyncEnumerable<Question> GetQuestionsByText(string text) //Get by text
@@ -61,6 +143,11 @@ namespace LibraryServices
         public IAsyncEnumerable<Category> GetCategoriesByText(string text) //Get by text
         {
             return (IAsyncEnumerable<Category>)_contextDb.Categories.Where(c => c.Description.Contains(text));
+        }
+
+        public Task<Category> GetCategoryById(int id) //Get by Id
+        {
+            return _contextDb.Categories.SingleAsync(c => c.Id.Equals(id));
         }
         #endregion
 
@@ -79,6 +166,70 @@ namespace LibraryServices
             }
             
             return newAnswer;
+        }
+
+        public async Task<Product> PostProduct(Product newProduct)
+        {
+            try
+            {
+                await _contextDb.AddAsync(newProduct);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+            return newProduct;
+        }
+
+        public async Task<User> PostUser(User newUser)
+        {
+            try
+            {
+                await _contextDb.AddAsync(newUser);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+            return newUser;
+        }
+
+        public async Task<CartLine> PostCartLine(CartLine newCartLine)
+        {
+            try
+            {
+                await _contextDb.AddAsync(newCartLine);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+            return newCartLine;
+        }
+
+        public async Task<BuyingCart> PostBuyingCart(BuyingCart newBuyingCart)
+        {
+            try
+            {
+                await _contextDb.AddAsync(newBuyingCart);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine(e);
+            }
+
+            return newBuyingCart;
         }
 
         public async Task<Question> PostQuestion(Question newQuestion)
@@ -131,6 +282,23 @@ namespace LibraryServices
             return true;
         }
 
+        public async Task<bool> PutProduct(int id, Product product)
+        {
+            if (product == null || id == 0 || product.Price < 0 || product.Stock <= -1) return false;
+
+            try
+            {
+                _contextDb.Update(product);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
         public async Task<bool> PutQuestion(int id, int answerId, int categoryId, string description)
         {
             try
@@ -151,14 +319,30 @@ namespace LibraryServices
             return true;
         }
 
-        public async Task<bool> PutCategory(int id, string description)
+        public async Task<bool> PutCategory(int id, Category category)
         {
+            if (category == null || id == 0) return false;
+
             try
             {
-                var category = await _contextDb.Categories.FindAsync(id);
-                if (category == null) return false;
+                _contextDb.Update(category);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
 
-                category.Description = description;
+        public async Task<bool> PutCartLine(int id, CartLine cartLine)
+        {
+            if (cartLine == null || id == 0) return false;
+
+            try
+            {
+                _contextDb.Update(cartLine);
                 await _contextDb.SaveChangesAsync();
             }
             catch (Exception e)
@@ -190,6 +374,24 @@ namespace LibraryServices
             return true;
         }
 
+        public async Task<bool> DeleteProduct(int id)
+        {
+            try
+            {
+                var product = await _contextDb.Products.SingleAsync(x => x.Id == id);
+                if (product == null) return false;
+
+                _contextDb.Products.Remove(product);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false; //quero saber se o valor false/true é lido no HttpClientService MVC
+            }
+            return true;
+        }
+
         public async Task<bool> DeleteCategory(int id)
         {
             try
@@ -198,6 +400,24 @@ namespace LibraryServices
                 if (category == null) return false;
 
                 _contextDb.Categories.Remove(category);
+                await _contextDb.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteCartLine(int id)
+        {
+            try
+            {
+                var cartLine = await _contextDb.CartLines.SingleAsync(x => x.Id == id);
+                if (cartLine == null) return false;
+
+                _contextDb.CartLines.Remove(cartLine);
                 await _contextDb.SaveChangesAsync();
             }
             catch (Exception e)
